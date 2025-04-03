@@ -104,7 +104,7 @@ export default function Home() {
           <h2 className="text-3xl font-bold mb-8 text-center text-gray-900">About Me</h2>
           <div className="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-md">
             <p className="text-gray-700 mb-4">
-              I'm Alfonso A. Solar, a Software Developer currently working at the City Government of Surigao. 
+              I&apos;m Alfonso A. Solar, a Software Developer currently working at the City Government of Surigao. 
               I graduated with a Bachelor of Science in Information Technology from Surigao del Norte State University.
             </p>
             <p className="text-gray-700 mb-4">
