@@ -212,9 +212,9 @@ export default function Home() {
               <h1 className="text-4xl md:text-6xl font-bold">
                 Alfonso A. Solar
               </h1>
-              <p className="text-xl md:text-2xl opacity-90 max-w-lg">
+              {/* <p className="text-xl md:text-2xl opacity-90 max-w-lg">
                 Building digital solutions at the City Government of Surigao
-              </p>
+              </p> */}
               <p className="text-lg opacity-80 max-w-lg">
                 23 years old passionate developer with expertise in web
                 development and entrepreneurial experience.
@@ -310,8 +310,11 @@ export default function Home() {
                 } text-lg leading-relaxed`}
               >
                 My expertise includes web application development with HTML,
-                CSS, and PHP with Laravel Framework. I also have knowledge in
-                React Native for mobile applications.
+                CSS, and PHP using the Laravel Framework. I also have experience
+                with Next.js for building modern React-based web applications
+                and Tailwind CSS for crafting responsive, utility-first UI
+                designs. Additionally, I have knowledge in React Native for
+                mobile application development.
               </p>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6">
@@ -584,7 +587,7 @@ export default function Home() {
                                 : "bg-emerald-100 text-emerald-800"
                             }`}
                           >
-                            3 Months
+                            August 2024 - November 2024
                           </div>
                         </div>
                         <p
@@ -626,7 +629,7 @@ export default function Home() {
                                 : "bg-emerald-100 text-emerald-800"
                             }`}
                           >
-                            Feb 2024 - Present
+                            Feb 2024 - May -2024
                           </div>
                         </div>
                         <p
@@ -675,7 +678,7 @@ export default function Home() {
                                 : "bg-emerald-100 text-emerald-800"
                             }`}
                           >
-                            Nov 2023 - Present
+                            Nov 2023 - May 2024
                           </div>
                         </div>
                         <p
@@ -816,10 +819,7 @@ export default function Home() {
                           Programming
                         </h4>
                         <p className="text-gray-700">
-                          Experienced beginner to intermediate programming in
-                          web application with HTML, CSS, and PHP with Laravel
-                          Framework. Also knowledgeable with basic React Native
-                          for mobile applications.
+                        Experienced beginner to intermediate in web application development using HTML, CSS, and PHP with the Laravel Framework. Also knowledgeable in basic React Native for mobile applications, with growing experience in building modern interfaces using Next.js and Tailwind CSS.
                         </p>
                       </div>
 
