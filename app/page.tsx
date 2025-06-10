@@ -819,7 +819,12 @@ export default function Home() {
                           Programming
                         </h4>
                         <p className="text-gray-700">
-                        Experienced beginner to intermediate in web application development using HTML, CSS, and PHP with the Laravel Framework. Also knowledgeable in basic React Native for mobile applications, with growing experience in building modern interfaces using Next.js and Tailwind CSS.
+                          Experienced beginner to intermediate in web
+                          application development using HTML, CSS, and PHP with
+                          the Laravel Framework. Also knowledgeable in basic
+                          React Native for mobile applications, with growing
+                          experience in building modern interfaces using Next.js
+                          and Tailwind CSS.
                         </p>
                       </div>
 
@@ -988,8 +993,8 @@ export default function Home() {
                         />
                       </svg>
                     </div>
-                    <a href="tel:09675133468" className="hover:underline">
-                      09675133468
+                    <a href="tel:09709143842" className="hover:underline">
+                      09709143842
                     </a>
                   </div>
 
@@ -1198,74 +1203,6 @@ export default function Home() {
                     </div>
                   </div>
                 </div>
-
-                <form className="mt-8">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    <div>
-                      <label
-                        className={`block text-sm font-medium mb-1 ${
-                          isDarkMode ? "text-gray-300" : "text-gray-700"
-                        }`}
-                      >
-                        Name
-                      </label>
-                      <input
-                        type="text"
-                        className={`w-full px-4 py-2 rounded-lg focus:ring-2 focus:ring-emerald-600 focus:border-transparent ${
-                          isDarkMode
-                            ? "bg-gray-700 border-gray-600 text-white"
-                            : "bg-white border-gray-300"
-                        }`}
-                        placeholder="Your name"
-                      />
-                    </div>
-                    <div>
-                      <label
-                        className={`block text-sm font-medium mb-1 ${
-                          isDarkMode ? "text-gray-300" : "text-gray-700"
-                        }`}
-                      >
-                        Email
-                      </label>
-                      <input
-                        type="email"
-                        className={`w-full px-4 py-2 rounded-lg focus:ring-2 focus:ring-emerald-600 focus:border-transparent ${
-                          isDarkMode
-                            ? "bg-gray-700 border-gray-600 text-white"
-                            : "bg-white border-gray-300"
-                        }`}
-                        placeholder="Your email"
-                      />
-                    </div>
-                    <div className="md:col-span-2">
-                      <label
-                        className={`block text-sm font-medium mb-1 ${
-                          isDarkMode ? "text-gray-300" : "text-gray-700"
-                        }`}
-                      >
-                        Message
-                      </label>
-                      <textarea
-                        className={`w-full px-4 py-2 rounded-lg focus:ring-2 focus:ring-emerald-600 focus:border-transparent h-32 ${
-                          isDarkMode
-                            ? "bg-gray-700 border-gray-600 text-white"
-                            : "bg-white border-gray-300"
-                        }`}
-                        placeholder="Your message"
-                      ></textarea>
-                    </div>
-                  </div>
-                  <button
-                    type="submit"
-                    className={`mt-6 font-medium py-2 px-6 rounded-lg transition-colors ${
-                      isDarkMode
-                        ? "bg-emerald-600 hover:bg-emerald-500 text-white"
-                        : "bg-emerald-600 hover:bg-emerald-700 text-white"
-                    }`}
-                  >
-                    Send Message
-                  </button>
-                </form>
               </div>
             </div>
           </div>
