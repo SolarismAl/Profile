@@ -1,13 +1,14 @@
-// app/layout.tsx
-import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
-import './globals.css';
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
+import { Analytics } from "@vercel/analytics/next";
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'Alfonso A. Solar | Software Developer',
-  description: 'Personal website for Alfonso A. Solar, Software Developer at City Government of Surigao',
+  title: "Alfonso A. Solar | Software Developer",
+  description:
+    "Personal website for Alfonso A. Solar, Software Developer at City Government of Surigao",
 };
 
 export default function RootLayout({
@@ -17,11 +18,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        {children}
+        <Analytics />
+      </body>
     </html>
   );
 }
-
-// app/globals.css
-
-// app/page.tsx
