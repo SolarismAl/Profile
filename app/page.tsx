@@ -12,7 +12,7 @@ export default function Home() {
   useEffect(() => {
     setIsLoaded(true);
 
-    const handleMouseMove = (e: any) => {
+    const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
     };
 
@@ -174,7 +174,7 @@ export default function Home() {
                   whileTap={{ scale: 0.95 }}
                   className="px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-cyan-500/25 transition-all duration-300"
                 >
-                  Let's Connect
+                  Let&apos;s Connect
                 </motion.a>
                 {/* <motion.a
                   href="#about"
@@ -702,7 +702,7 @@ export default function Home() {
                 &lt;contact /&gt;
               </span>
               <h2 className="text-4xl font-bold mt-4 mb-8">
-                Let's Build Something
+                Let&apos;s Build Something
               </h2>
             </div>
 
