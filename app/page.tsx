@@ -1,343 +1,248 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Image from "next/image";
 import { motion } from "framer-motion";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState("experience");
   const [isLoaded, setIsLoaded] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     setIsLoaded(true);
 
-    // Check user's preferred color scheme
-    if (
-      window.matchMedia &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches
-    ) {
-      setIsDarkMode(true);
-    }
-
-    // Smooth scroll functionality for anchor links
-    const handleAnchorClick = (e: Event) => {
-      const href = (e.target as HTMLAnchorElement).getAttribute("href");
-      if (href && href.startsWith("#")) {
-        e.preventDefault();
-        const targetId = href.substring(1);
-        const targetElement = document.getElementById(targetId);
-
-        if (targetElement) {
-          window.scrollTo({
-            top: targetElement.offsetTop,
-            behavior: "smooth",
-          });
-        }
-      }
+    const handleMouseMove = (e: any) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
     };
 
-    // Add event listeners to all anchor links
-    const anchorLinks = document.querySelectorAll('a[href^="#"]');
-    anchorLinks.forEach((anchor) => {
-      anchor.addEventListener("click", handleAnchorClick);
-    });
-
-    // Cleanup event listeners on component unmount
-    return () => {
-      anchorLinks.forEach((anchor) => {
-        anchor.removeEventListener("click", handleAnchorClick);
-      });
-    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
   const tabs = [
-    { id: "experience", label: "Experience" },
-    { id: "education", label: "Education" },
-    { id: "skills", label: "Skills" },
+    { id: "experience", label: "Experience", icon: "💼" },
+    { id: "education", label: "Education", icon: "🎓" },
+    { id: "skills", label: "Skills", icon: "⚡" },
   ];
 
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
-  };
+  const skills = [
+    { name: "React/Next.js", level: 85, color: "from-blue-500 to-cyan-400" },
+    { name: "Laravel/PHP", level: 90, color: "from-red-500 to-orange-400" },
+    { name: "React Native", level: 75, color: "from-purple-500 to-pink-400" },
+    { name: "Tailwind CSS", level: 95, color: "from-teal-500 to-green-400" },
+    { name: "JavaScript", level: 88, color: "from-yellow-500 to-amber-400" },
+    { name: "UI/UX Design", level: 70, color: "from-indigo-500 to-purple-400" },
+  ];
 
   return (
-    <main
-      className={`min-h-screen ${
-        isDarkMode ? "bg-gray-900 text-gray-100" : "bg-gray-50 text-gray-900"
-      } transition-colors duration-300`}
-    >
-      {/* Navbar */}
-      <nav
-        className={`sticky top-0 z-50 ${
-          isDarkMode
-            ? "bg-gray-900/90 backdrop-blur-lg"
-            : "bg-white/90 backdrop-blur-lg"
-        } shadow-sm`}
-      >
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <a href="#" className="text-xl font-bold">
-            Alfonso
-            <span
-              className={`${
-                isDarkMode ? "text-emerald-400" : "text-emerald-600"
-              }`}
+    <div className="min-h-screen bg-black text-white overflow-x-hidden">
+      {/* Animated Background */}
+      <div className="fixed inset-0 z-0">
+        <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div>
+        <div
+          className="absolute w-96 h-96 rounded-full bg-gradient-to-r from-cyan-500/20 to-blue-500/20 blur-3xl"
+          style={{
+            left: mousePosition.x - 192,
+            top: mousePosition.y - 192,
+            transition: "all 0.3s ease-out",
+          }}
+        ></div>
+        <div className="absolute top-1/4 right-1/4 w-64 h-64 rounded-full bg-gradient-to-r from-purple-500/10 to-pink-500/10 blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-1/4 left-1/3 w-80 h-80 rounded-full bg-gradient-to-r from-emerald-500/10 to-teal-500/10 blur-3xl animate-pulse"></div>
+      </div>
+
+      {/* Navigation */}
+      <nav className="fixed top-0 w-full z-50 bg-black/20 backdrop-blur-xl border-b border-gray-800/50">
+        <div className="container mx-auto px-6 py-4">
+          <div className="flex justify-between items-center">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="text-2xl font-bold"
             >
-              .Solar
-            </span>
-          </a>
-          <div className="flex items-center gap-6">
-            <div className="hidden md:flex gap-6">
-              <a
-                href="#about"
-                className={`${
-                  isDarkMode
-                    ? "hover:text-emerald-400"
-                    : "hover:text-emerald-600"
-                } transition-colors`}
-              >
-                About
-              </a>
-              <a
-                href="#resume"
-                className={`${
-                  isDarkMode
-                    ? "hover:text-emerald-400"
-                    : "hover:text-emerald-600"
-                } transition-colors`}
-              >
-                Resume
-              </a>
-              <a
-                href="#contact"
-                className={`${
-                  isDarkMode
-                    ? "hover:text-emerald-400"
-                    : "hover:text-emerald-600"
-                } transition-colors`}
-              >
-                Contact
-              </a>
+              <span className="text-white">Alfonso</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
+                .dev
+              </span>
+            </motion.div>
+
+            <div className="hidden md:flex items-center space-x-8">
+              {["About", "Resume", "Contact"].map((item, index) => (
+                <motion.a
+                  key={item}
+                  href={`#${item.toLowerCase()}`}
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  className="text-gray-300 hover:text-white transition-all duration-300 relative group"
+                >
+                  {item}
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-cyan-400 to-blue-500 group-hover:w-full transition-all duration-300"></span>
+                </motion.a>
+              ))}
             </div>
-            <button
-              onClick={toggleDarkMode}
-              className={`p-2 rounded-full ${
-                isDarkMode
-                  ? "bg-gray-800 text-yellow-400"
-                  : "bg-gray-100 text-gray-800"
-              }`}
+            {/* 
+            <motion.button
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.5 }}
+              className="w-10 h-10 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 flex items-center justify-center hover:scale-110 transition-transform"
             >
-              {isDarkMode ? (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              ) : (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
-                </svg>
-              )}
-            </button>
+              <svg
+                className="w-5 h-5 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              </svg>
+            </motion.button> */}
           </div>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <section
-        className={`relative ${
-          isDarkMode
-            ? "bg-gradient-to-r from-emerald-900 to-emerald-700"
-            : "bg-gradient-to-r from-emerald-600 to-emerald-400"
-        } overflow-hidden`}
-      >
-        {/* Abstract shapes background */}
-        <div className="absolute inset-0 overflow-hidden opacity-20">
-          <div className="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-white/20"></div>
-          <div className="absolute top-32 right-64 w-64 h-64 rounded-full bg-white/20"></div>
-          <div className="absolute -bottom-20 right-10 w-80 h-80 rounded-full bg-white/20"></div>
-        </div>
-
-        <div className="container mx-auto px-4 py-20 md:py-28 flex flex-col md:flex-row items-center relative z-10">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={isLoaded ? { opacity: 1, scale: 1 } : {}}
-            transition={{ duration: 0.8, type: "spring" }}
-            className="md:w-1/3 flex justify-center mb-10 md:mb-0"
-          >
-            <div className="relative">
-              <div className="absolute inset-0 rounded-full bg-white blur-xl opacity-20 transform -translate-x-2 translate-y-2"></div>
-              <div
-                className={`rounded-full overflow-hidden border-4 ${
-                  isDarkMode ? "border-emerald-400" : "border-white"
-                } h-64 w-64 relative shadow-2xl`}
-              >
-                <Image
-                  src="/alfonso_solar.jpg"
-                  alt="Alfonso A. Solar"
-                  fill
-                  style={{ objectFit: "cover" }}
-                  priority
-                />
+      <section className="relative min-h-screen flex items-center justify-center px-6">
+        <div className="container mx-auto relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Profile Image */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={isLoaded ? { opacity: 1, scale: 1 } : {}}
+              transition={{ duration: 0.8 }}
+              className="flex justify-center lg:justify-end"
+            >
+              <div className="relative">
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-500 blur-2xl opacity-30 animate-pulse"></div>
+                <div className="relative w-80 h-80 rounded-2xl overflow-hidden border border-gray-700/50 bg-gradient-to-br from-gray-800 to-gray-900">
+                  <div className="absolute inset-2 rounded-xl overflow-hidden">
+                    <img
+                      src="/alfonso_solar.jpg"
+                      alt="Alfonso A. Solar"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  {/* Tech overlay elements */}
+                  <div className="absolute top-4 right-4 w-4 h-4 rounded-full bg-green-400 animate-pulse"></div>
+                  <div className="absolute bottom-4 left-4 flex space-x-1">
+                    <div className="w-2 h-2 rounded-full bg-cyan-400"></div>
+                    <div className="w-2 h-2 rounded-full bg-blue-400"></div>
+                    <div className="w-2 h-2 rounded-full bg-purple-400"></div>
+                  </div>
+                </div>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={isLoaded ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="md:w-2/3 md:pl-16 text-white"
-          >
-            <div className="space-y-4">
-              <h2
-                className={`text-sm uppercase tracking-wider ${
-                  isDarkMode ? "text-emerald-300" : "text-emerald-100"
-                }`}
-              >
-                Software Developer
-              </h2>
-              <h1 className="text-4xl md:text-6xl font-bold">
-                Alfonso A. Solar
+            {/* Hero Content */}
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              animate={isLoaded ? { opacity: 1, x: 0 } : {}}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="text-left"
+            >
+              <div className="mb-6">
+                <span className="text-cyan-400 text-sm uppercase tracking-wider font-mono">
+                  &gt; Software Developer
+                </span>
+              </div>
+
+              <h1 className="text-5xl lg:text-7xl font-black mb-6 leading-tight">
+                <span className="text-white">Alfonso</span>
+                <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600">
+                  Solar
+                </span>
               </h1>
-              {/* <p className="text-xl md:text-2xl opacity-90 max-w-lg">
-                Building digital solutions at the City Government of Surigao
-              </p> */}
-              <p className="text-lg opacity-80 max-w-lg">
-                23 years old passionate developer with expertise in web
-                development and entrepreneurial experience.
+
+              <p className="text-gray-400 text-lg mb-8 max-w-lg font-light leading-relaxed">
+                Crafting digital experiences with code. Transforming ideas into
+                scalable solutions using modern web technologies and innovative
+                approaches.
               </p>
-              <div className="flex flex-wrap gap-4 pt-4">
-                <a
+
+              <div className="flex flex-col sm:flex-row gap-4 mb-12">
+                <motion.a
                   href="mailto:alsolarapole@gmail.com"
-                  className={`${
-                    isDarkMode
-                      ? "bg-emerald-400 text-gray-900 hover:bg-emerald-300"
-                      : "bg-white text-emerald-900 hover:bg-emerald-50"
-                  } px-6 py-3 rounded-full font-medium transition duration-300 shadow-lg`}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-cyan-500/25 transition-all duration-300"
                 >
-                  Contact Me
-                </a>
-                <a
+                  Let's Connect
+                </motion.a>
+                {/* <motion.a
                   href="#about"
-                  className="bg-transparent border-2 border-white px-6 py-3 rounded-full font-medium hover:bg-white hover:text-emerald-900 transition duration-300 learn-more-btn"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="px-8 py-4 border border-gray-700 text-white font-semibold rounded-xl hover:border-cyan-500 hover:shadow-lg transition-all duration-300"
                 >
-                  Learn More
-                </a>
+                  View Work
+                </motion.a> */}
               </div>
-            </div>
-          </motion.div>
+
+              {/* Tech Stack Icons */}
+              <div className="flex space-x-6">
+                {["React", "Laravel", "Next.js", "Tailwind"].map(
+                  (tech, index) => (
+                    <motion.div
+                      key={tech}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.5 + index * 0.1 }}
+                      className="text-gray-500 hover:text-cyan-400 transition-colors cursor-pointer text-sm font-mono"
+                    >
+                      {tech}
+                    </motion.div>
+                  )
+                )}
+              </div>
+            </motion.div>
+          </div>
         </div>
 
-        {/* Wave divider */}
-        <div
-          className={`absolute bottom-0 left-0 w-full overflow-hidden leading-none ${
-            isDarkMode ? "text-gray-900" : "text-gray-50"
-          }`}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 1200 120"
-            preserveAspectRatio="none"
-            className="w-full h-16 md:h-24"
-          >
-            <path
-              d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V59.27C57.1,66.9,114.97,76.66,170.25,78.94Z"
-              fill="currentColor"
-            ></path>
-          </svg>
+        {/* Floating Code Elements */}
+        <div className="absolute top-20 right-20 text-gray-700 font-mono text-sm opacity-50">
+          <div>{"const developer = {"}</div>
+          <div className="ml-4">{'name: "Alfonso",'}</div>
+          <div className="ml-4">{'passion: "code"'}</div>
+          <div>{"}"}</div>
         </div>
       </section>
 
       {/* About Section */}
-      <section
-        id="about"
-        className={`py-24 container mx-auto px-4 ${
-          isDarkMode ? "text-gray-100" : "text-gray-900"
-        }`}
-      >
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isLoaded ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          className="max-w-4xl mx-auto"
-        >
-          <div className="flex items-center justify-center gap-4 mb-12">
-            <div
-              className={`h-px w-12 ${
-                isDarkMode ? "bg-emerald-400" : "bg-emerald-600"
-              }`}
-            ></div>
-            <h2 className="text-3xl font-bold">About Me</h2>
-            <div
-              className={`h-px w-12 ${
-                isDarkMode ? "bg-emerald-400" : "bg-emerald-600"
-              }`}
-            ></div>
-          </div>
-
-          <div
-            className={`${
-              isDarkMode ? "bg-gray-800" : "bg-white"
-            } p-8 rounded-xl shadow-xl transition-all duration-300 hover:shadow-2xl`}
+      <section id="about" className="relative py-24 px-6">
+        <div className="container mx-auto relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
           >
-            <div className="space-y-6">
-              <p
-                className={`${
-                  isDarkMode ? "text-gray-300" : "text-gray-700"
-                } text-lg leading-relaxed`}
-              >
-                I&apos;m Alfonso A. Solar, a Software Developer currently
-                working at the City Government of Surigao. I graduated with a
-                Bachelor of Science in Information Technology from Surigao del
-                Norte State University.
-              </p>
-              <p
-                className={`${
-                  isDarkMode ? "text-gray-300" : "text-gray-700"
-                } text-lg leading-relaxed`}
-              >
-                My expertise includes web application development with HTML,
-                CSS, and PHP using the Laravel Framework. I also have experience
-                with Next.js for building modern React-based web applications
-                and Tailwind CSS for crafting responsive, utility-first UI
-                designs. Additionally, I have knowledge in React Native for
-                mobile application development.
-              </p>
+            <div className="text-center mb-16">
+              <span className="text-cyan-400 font-mono text-sm">
+                &lt;about /&gt;
+              </span>
+              <h2 className="text-4xl font-bold mt-4 mb-8">
+                Building Digital Solutions
+              </h2>
+            </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6">
-                <div
-                  className={`${
-                    isDarkMode
-                      ? "bg-gray-700 hover:bg-gray-600"
-                      : "bg-gray-50 hover:bg-gray-100"
-                  } p-6 rounded-lg transition-colors`}
-                >
-                  <div
-                    className={`inline-flex p-3 rounded-full mb-4 ${
-                      isDarkMode
-                        ? "bg-emerald-400/20 text-emerald-400"
-                        : "bg-emerald-100 text-emerald-600"
-                    }`}
-                  >
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              {[
+                {
+                  title: "Full-Stack Development",
+                  description:
+                    "Creating end-to-end web applications with Laravel backend and modern React frontends",
+                  icon: (
                     <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6"
+                      className="w-8 h-8"
                       fill="none"
-                      viewBox="0 0 24 24"
                       stroke="currentColor"
+                      viewBox="0 0 24 24"
                     >
                       <path
                         strokeLinecap="round"
@@ -346,40 +251,18 @@ export default function Home() {
                         d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
                       />
                     </svg>
-                  </div>
-                  <h3 className="text-xl font-semibold mb-2">
-                    Web Development
-                  </h3>
-                  <p
-                    className={`${
-                      isDarkMode ? "text-gray-400" : "text-gray-600"
-                    }`}
-                  >
-                    Creating modern, responsive web applications using Laravel
-                    and React
-                  </p>
-                </div>
-
-                <div
-                  className={`${
-                    isDarkMode
-                      ? "bg-gray-700 hover:bg-gray-600"
-                      : "bg-gray-50 hover:bg-gray-100"
-                  } p-6 rounded-lg transition-colors`}
-                >
-                  <div
-                    className={`inline-flex p-3 rounded-full mb-4 ${
-                      isDarkMode
-                        ? "bg-emerald-400/20 text-emerald-400"
-                        : "bg-emerald-100 text-emerald-600"
-                    }`}
-                  >
+                  ),
+                },
+                {
+                  title: "Mobile Innovation",
+                  description:
+                    "Building cross-platform mobile experiences that bridge the gap between web and native",
+                  icon: (
                     <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6"
+                      className="w-8 h-8"
                       fill="none"
-                      viewBox="0 0 24 24"
                       stroke="currentColor"
+                      viewBox="0 0 24 24"
                     >
                       <path
                         strokeLinecap="round"
@@ -388,855 +271,783 @@ export default function Home() {
                         d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"
                       />
                     </svg>
-                  </div>
-                  <h3 className="text-xl font-semibold mb-2">Mobile Apps</h3>
-                  <p
-                    className={`${
-                      isDarkMode ? "text-gray-400" : "text-gray-600"
-                    }`}
-                  >
-                    Developing cross-platform mobile solutions with React Native
-                  </p>
-                </div>
-
-                <div
-                  className={`${
-                    isDarkMode
-                      ? "bg-gray-700 hover:bg-gray-600"
-                      : "bg-gray-50 hover:bg-gray-100"
-                  } p-6 rounded-lg transition-colors`}
-                >
-                  <div
-                    className={`inline-flex p-3 rounded-full mb-4 ${
-                      isDarkMode
-                        ? "bg-emerald-400/20 text-emerald-400"
-                        : "bg-emerald-100 text-emerald-600"
-                    }`}
-                  >
+                  ),
+                },
+                {
+                  title: "Startup Mindset",
+                  description:
+                    "Transforming ideas into viable products through lean development and strategic thinking",
+                  icon: (
                     <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6"
+                      className="w-8 h-8"
                       fill="none"
-                      viewBox="0 0 24 24"
                       stroke="currentColor"
+                      viewBox="0 0 24 24"
                     >
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
                         strokeWidth={2}
-                        d="M13 10V3L4 14h7v7l9-11h-7z"
+                        d="M13 10V3L4 14h7v7l9-11h-7"
                       />
                     </svg>
+                  ),
+                },
+              ].map((item, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.2 }}
+                  viewport={{ once: true }}
+                  className="group relative"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-300"></div>
+                  <div className="relative bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-2xl p-8 hover:border-cyan-500/50 transition-all duration-300">
+                    <div className="text-cyan-400 mb-4">{item.icon}</div>
+                    <h3 className="text-xl font-bold mb-4">{item.title}</h3>
+                    <p className="text-gray-400 leading-relaxed">
+                      {item.description}
+                    </p>
                   </div>
-                  <h3 className="text-xl font-semibold mb-2">
-                    Entrepreneurship
-                  </h3>
-                  <p
-                    className={`${
-                      isDarkMode ? "text-gray-400" : "text-gray-600"
-                    }`}
-                  >
-                    Transforming innovative ideas into viable startup ventures
-                  </p>
-                </div>
-              </div>
+                </motion.div>
+              ))}
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
       </section>
 
-      {/* Resume/Tabbed Content Section */}
-      <section
-        id="resume"
-        className={`py-20 ${isDarkMode ? "bg-gray-800" : "bg-gray-100"}`}
-      >
-        <div className="container mx-auto px-4">
+      {/* Resume Section */}
+      <section id="resume" className="relative py-24 px-6">
+        <div className="container mx-auto relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={isLoaded ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5, delay: 0.6 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
           >
-            <div className="flex items-center justify-center gap-4 mb-12">
-              <div
-                className={`h-px w-12 ${
-                  isDarkMode ? "bg-emerald-400" : "bg-emerald-600"
-                }`}
-              ></div>
-              <h2
-                className={`text-3xl font-bold ${
-                  isDarkMode ? "text-white" : "text-gray-900"
-                }`}
-              >
-                My Resume
+            <div className="text-center mb-16">
+              <span className="text-cyan-400 font-mono text-sm">
+                &lt;resume /&gt;
+              </span>
+              <h2 className="text-4xl font-bold mt-4 mb-8">
+                Professional Journey
               </h2>
-              <div
-                className={`h-px w-12 ${
-                  isDarkMode ? "bg-emerald-400" : "bg-emerald-600"
-                }`}
-              ></div>
             </div>
 
-            <div
-              className={`${
-                isDarkMode ? "bg-gray-900" : "bg-white"
-              } rounded-xl shadow-xl overflow-hidden transition-all duration-300 hover:shadow-2xl`}
-            >
-              {/* Tab Navigation */}
-              <div className="flex">
+            {/* Tab Navigation */}
+            <div className="flex justify-center mb-12">
+              <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-2xl p-1 flex">
                 {tabs.map((tab) => (
                   <button
                     key={tab.id}
-                    className={`flex-1 py-5 font-medium transition-all duration-300 ${
-                      activeTab === tab.id
-                        ? isDarkMode
-                          ? "bg-emerald-700 text-white"
-                          : "bg-emerald-600 text-white"
-                        : isDarkMode
-                        ? "text-gray-400 hover:bg-gray-800 hover:text-gray-200"
-                        : "text-gray-600 hover:bg-gray-100 hover:text-gray-800"
-                    }`}
                     onClick={() => setActiveTab(tab.id)}
+                    className={`px-6 py-3 rounded-xl font-medium transition-all duration-300 flex items-center space-x-2 ${
+                      activeTab === tab.id
+                        ? "bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow-lg"
+                        : "text-gray-400 hover:text-white"
+                    }`}
                   >
-                    {tab.label}
+                    <span className="text-sm">{tab.icon}</span>
+                    <span>{tab.label}</span>
                   </button>
                 ))}
               </div>
+            </div>
 
-              {/* Tab Content */}
-              <div className="p-8">
-                {activeTab === "experience" && (
-                  <div className="animate-fade-in">
-                    <h3
-                      className={`text-2xl font-bold mb-8 ${
-                        isDarkMode ? "text-white" : "text-gray-900"
-                      }`}
+            {/* Tab Content */}
+            <div className="max-w-4xl mx-auto">
+              {activeTab === "experience" && (
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="space-y-8"
+                >
+                  {[
+                    {
+                      title: "Software Developer",
+                      company: "City Government of Surigao",
+                      period: "Present",
+                      status: "active",
+                      description:
+                        "Developing and maintaining government web applications and digital services",
+                    },
+                    {
+                      title: "Call Center Associate",
+                      company: "TeleSupportBPO",
+                      period: "Aug 2024 - Nov 2024",
+                      status: "completed",
+                    },
+                    {
+                      title: "App Development",
+                      company: "SNSU WAVES-TBI",
+                      period: "Feb 2024 - May 2024",
+                      status: "completed",
+                      description:
+                        "Front-end developer and hustler of the ePlete App",
+                    },
+                    {
+                      title: "Start-Up Incubatees",
+                      company: "SNSU WAVES-TBI",
+                      period: "Nov 2023 - May 2024",
+                      status: "completed",
+                      description:
+                        "Member of ePlete (Electronic Fare Payment for Leisure Expenses and Transportation Expenditures)",
+                    },
+                  ].map((job, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                      className="group relative"
                     >
-                      Experience & Trainings
-                    </h3>
-
-                    <div className="space-y-10">
-                      <div
-                        className={`relative pl-10 ${
-                          isDarkMode
-                            ? "border-l-2 border-emerald-500"
-                            : "border-l-2 border-emerald-600"
-                        } animate-slide-in`}
-                        style={{ animationDelay: "0.1s" }}
-                      >
-                        <div
-                          className={`absolute -left-2.5 top-0 h-5 w-5 rounded-full ${
-                            isDarkMode
-                              ? "bg-emerald-500 ring-4 ring-gray-900"
-                              : "bg-emerald-600 ring-4 ring-white"
-                          }`}
-                        ></div>
-                        <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-6 mb-2">
-                          <h4
-                            className={`text-xl font-semibold ${
-                              isDarkMode ? "text-white" : "text-gray-900"
-                            }`}
-                          >
-                            Software Developer
-                          </h4>
-                          <div
-                            className={`px-3 py-1 rounded-full text-sm ${
-                              isDarkMode
-                                ? "bg-emerald-500/20 text-emerald-400"
-                                : "bg-emerald-100 text-emerald-800"
-                            }`}
-                          >
-                            Present
+                      <div className="absolute inset-0 bg-gradient-to-r from-gray-800/50 to-gray-900/50 rounded-xl blur-xl group-hover:blur-2xl transition-all duration-300"></div>
+                      <div className="relative bg-gray-900/30 backdrop-blur-sm border border-gray-800 rounded-xl p-6 hover:border-cyan-500/30 transition-all duration-300">
+                        <div className="flex items-start justify-between mb-4">
+                          <div>
+                            <h3 className="text-xl font-bold text-white mb-1">
+                              {job.title}
+                            </h3>
+                            <p className="text-cyan-400 font-medium">
+                              {job.company}
+                            </p>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <span
+                              className={`px-3 py-1 rounded-full text-xs font-medium ${
+                                job.status === "active"
+                                  ? "bg-green-500/20 text-green-400"
+                                  : "bg-gray-700/50 text-gray-400"
+                              }`}
+                            >
+                              {job.period}
+                            </span>
+                            {job.status === "active" && (
+                              <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
+                            )}
                           </div>
                         </div>
-                        <p
-                          className={`${
-                            isDarkMode ? "text-gray-400" : "text-gray-700"
-                          } mb-2`}
-                        >
-                          City Government of Surigao
-                        </p>
+                        {job.description && (
+                          <p className="text-gray-400 text-sm leading-relaxed">
+                            {job.description}
+                          </p>
+                        )}
                       </div>
+                    </motion.div>
+                  ))}
+                </motion.div>
+              )}
 
-                      <div
-                        className={`relative pl-10 ${
-                          isDarkMode
-                            ? "border-l-2 border-emerald-500"
-                            : "border-l-2 border-emerald-600"
-                        } animate-slide-in`}
-                        style={{ animationDelay: "0.2s" }}
-                      >
-                        <div
-                          className={`absolute -left-2.5 top-0 h-5 w-5 rounded-full ${
-                            isDarkMode
-                              ? "bg-emerald-500 ring-4 ring-gray-900"
-                              : "bg-emerald-600 ring-4 ring-white"
-                          }`}
-                        ></div>
-                        <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-6 mb-2">
-                          <h4
-                            className={`text-xl font-semibold ${
-                              isDarkMode ? "text-white" : "text-gray-900"
-                            }`}
-                          >
-                            Call Center Associate
-                          </h4>
-                          <div
-                            className={`px-3 py-1 rounded-full text-sm ${
-                              isDarkMode
-                                ? "bg-emerald-500/20 text-emerald-400"
-                                : "bg-emerald-100 text-emerald-800"
-                            }`}
-                          >
-                            August 2024 - November 2024
-                          </div>
-                        </div>
-                        <p
-                          className={`${
-                            isDarkMode ? "text-gray-400" : "text-gray-700"
-                          } mb-2`}
-                        >
-                          TeleSupportBPO
-                        </p>
-                      </div>
-
-                      <div
-                        className={`relative pl-10 ${
-                          isDarkMode
-                            ? "border-l-2 border-emerald-500"
-                            : "border-l-2 border-emerald-600"
-                        } animate-slide-in`}
-                        style={{ animationDelay: "0.3s" }}
-                      >
-                        <div
-                          className={`absolute -left-2.5 top-0 h-5 w-5 rounded-full ${
-                            isDarkMode
-                              ? "bg-emerald-500 ring-4 ring-gray-900"
-                              : "bg-emerald-600 ring-4 ring-white"
-                          }`}
-                        ></div>
-                        <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-6 mb-2">
-                          <h4
-                            className={`text-xl font-semibold ${
-                              isDarkMode ? "text-white" : "text-gray-900"
-                            }`}
-                          >
-                            App Development
-                          </h4>
-                          <div
-                            className={`px-3 py-1 rounded-full text-sm ${
-                              isDarkMode
-                                ? "bg-emerald-500/20 text-emerald-400"
-                                : "bg-emerald-100 text-emerald-800"
-                            }`}
-                          >
-                            Feb 2024 - May -2024
-                          </div>
-                        </div>
-                        <p
-                          className={`${
-                            isDarkMode ? "text-gray-400" : "text-gray-700"
-                          } mb-2`}
-                        >
-                          SNSU WAVES-TBI
-                        </p>
-                        <p
-                          className={`${
-                            isDarkMode ? "text-gray-400" : "text-gray-700"
-                          } mt-2`}
-                        >
-                          Front-end developer and hustler of the ePlete App.
-                        </p>
-                      </div>
-
-                      <div
-                        className={`relative pl-10 ${
-                          isDarkMode
-                            ? "border-l-2 border-emerald-500"
-                            : "border-l-2 border-emerald-600"
-                        } animate-slide-in`}
-                        style={{ animationDelay: "0.4s" }}
-                      >
-                        <div
-                          className={`absolute -left-2.5 top-0 h-5 w-5 rounded-full ${
-                            isDarkMode
-                              ? "bg-emerald-500 ring-4 ring-gray-900"
-                              : "bg-emerald-600 ring-4 ring-white"
-                          }`}
-                        ></div>
-                        <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-6 mb-2">
-                          <h4
-                            className={`text-xl font-semibold ${
-                              isDarkMode ? "text-white" : "text-gray-900"
-                            }`}
-                          >
-                            Start-Up Incubatees
-                          </h4>
-                          <div
-                            className={`px-3 py-1 rounded-full text-sm ${
-                              isDarkMode
-                                ? "bg-emerald-500/20 text-emerald-400"
-                                : "bg-emerald-100 text-emerald-800"
-                            }`}
-                          >
-                            Nov 2023 - May 2024
-                          </div>
-                        </div>
-                        <p
-                          className={`${
-                            isDarkMode ? "text-gray-400" : "text-gray-700"
-                          } mb-2`}
-                        >
-                          SNSU WAVES-TBI
-                        </p>
-                        <p
-                          className={`${
-                            isDarkMode ? "text-gray-400" : "text-gray-700"
-                          } mt-2`}
-                        >
-                          Member of ePlete (Electronic Fare Payment for Leisure
-                          Expenses and Transportation Expenditures).
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {activeTab === "education" && (
-                  <div className="animate-fade-in">
-                    <h3
-                      className={`text-2xl font-bold mb-8 ${
-                        isDarkMode ? "text-white" : "text-gray-900"
-                      }`}
+              {activeTab === "education" && (
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="space-y-8"
+                >
+                  {[
+                    {
+                      degree: "Master in Information Technology",
+                      school: "Surigao del Norte State University",
+                      period: `2025 - Present`,
+                      type: "Postgraduate",
+                    },
+                    {
+                      degree: "Bachelor of Science in Information Technology",
+                      school: "Surigao del Norte State University",
+                      period: "2019 - 2023",
+                      type: "Undergraduate",
+                    },
+                    {
+                      degree: "Senior High School",
+                      school: "Amando A. Fabio National High School",
+                      period: "2017 - 2019",
+                      type: "Secondary",
+                    },
+                  ].map((edu, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.2 }}
+                      className="group relative"
                     >
-                      Education
+                      <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-xl blur-xl group-hover:blur-2xl transition-all duration-300"></div>
+                      <div className="relative bg-gray-900/30 backdrop-blur-sm border border-gray-800 rounded-xl p-6 hover:border-purple-500/30 transition-all duration-300">
+                        <div className="flex items-start justify-between mb-4">
+                          <div>
+                            <h3 className="text-xl font-bold text-white mb-1">
+                              {edu.degree}
+                            </h3>
+                            <p className="text-purple-400 font-medium">
+                              {edu.school}
+                            </p>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <span className="px-3 py-1 rounded-full text-xs font-medium bg-purple-500/20 text-purple-400">
+                              {edu.period}
+                            </span>
+                          </div>
+                        </div>
+                        <span className="text-gray-500 text-sm">
+                          {edu.type} Education
+                        </span>
+                      </div>
+                    </motion.div>
+                  ))}
+                </motion.div>
+              )}
+
+              {activeTab === "skills" && (
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="space-y-8"
+                >
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    {skills.map((skill, index) => (
+                      <motion.div
+                        key={skill.name}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                        className="group relative"
+                      >
+                        <div className="relative bg-gray-900/30 backdrop-blur-sm border border-gray-800 rounded-xl p-6 hover:border-cyan-500/30 transition-all duration-300">
+                          <div className="flex justify-between items-center mb-4">
+                            <h3 className="text-lg font-bold text-white">
+                              {skill.name}
+                            </h3>
+                            <span className="text-cyan-400 font-mono text-sm">
+                              {skill.level}%
+                            </span>
+                          </div>
+                          <div className="w-full bg-gray-800 rounded-full h-2 overflow-hidden">
+                            <motion.div
+                              initial={{ width: 0 }}
+                              whileInView={{ width: `${skill.level}%` }}
+                              transition={{ duration: 1, delay: index * 0.1 }}
+                              viewport={{ once: true }}
+                              className={`h-full bg-gradient-to-r ${skill.color} rounded-full relative`}
+                            >
+                              <div className="absolute inset-0 bg-white/20 animate-pulse rounded-full"></div>
+                            </motion.div>
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+
+                  {/* Additional Skills */}
+                  <div className="mt-12">
+                    <h3 className="text-2xl font-bold mb-6">
+                      Core Competencies
                     </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {[
+                        {
+                          title: "Web Development Mastery",
+                          description:
+                            "Expert in HTML, CSS, PHP with Laravel Framework. Building responsive, scalable web applications.",
+                          tech: ["Laravel", "PHP", "HTML5", "CSS3"],
+                        },
+                        {
+                          title: "Modern Frontend",
+                          description:
+                            "Creating dynamic user interfaces with React, Next.js, and Tailwind CSS for optimal user experience.",
+                          tech: ["React", "Next.js", "Tailwind", "JavaScript"],
+                        },
+                        {
+                          title: "Mobile Development",
+                          description:
+                            "Cross-platform mobile app development using React Native for iOS and Android platforms.",
+                          tech: ["React Native", "Mobile UI", "Cross-platform"],
+                        },
+                        {
+                          title: "Entrepreneurial Vision",
+                          description:
+                            "Strategic project development, proposal creation, and startup experience from incubation programs.",
+                          tech: ["Strategy", "Pitching", "Project Management"],
+                        },
+                      ].map((competency, index) => (
+                        <motion.div
+                          key={index}
+                          initial={{ opacity: 0, scale: 0.9 }}
+                          whileInView={{ opacity: 1, scale: 1 }}
+                          transition={{ delay: index * 0.1 }}
+                          viewport={{ once: true }}
+                          className="bg-gray-900/30 backdrop-blur-sm border border-gray-800 rounded-xl p-6 hover:border-emerald-500/30 transition-all duration-300"
+                        >
+                          <h4 className="text-lg font-bold text-white mb-3">
+                            {competency.title}
+                          </h4>
+                          <p className="text-gray-400 text-sm mb-4 leading-relaxed">
+                            {competency.description}
+                          </p>
+                          <div className="flex flex-wrap gap-2">
+                            {competency.tech.map((t, i) => (
+                              <span
+                                key={i}
+                                className="px-2 py-1 bg-emerald-500/20 text-emerald-400 rounded-md text-xs font-mono"
+                              >
+                                {t}
+                              </span>
+                            ))}
+                          </div>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </div>
+          </motion.div>
+        </div>
+      </section>
 
-                    <div className="space-y-10">
-                      <div
-                        className={`relative pl-10 ${
-                          isDarkMode
-                            ? "border-l-2 border-emerald-500"
-                            : "border-l-2 border-emerald-600"
-                        } animate-slide-in`}
-                        style={{ animationDelay: "0.1s" }}
+      {/* Projects Showcase */}
+      {/* <section id="projects" className="relative py-24 px-6">
+        <div className="container mx-auto relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <div className="text-center mb-16">
+              <span className="text-cyan-400 font-mono text-sm">
+                &lt;projects /&gt;
+              </span>
+              <h2 className="text-4xl font-bold mt-4 mb-8">Featured Work</h2>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {[
+                {
+                  name: "ePlete App",
+                  description:
+                    "Electronic Fare Payment system for transportation and leisure expenses. Built during startup incubation program.",
+                  tech: ["React Native", "Mobile Development", "Fintech"],
+                  status: "Startup Project",
+                },
+                {
+                  name: "Government Web Portal",
+                  description:
+                    "Modern web applications for city government services, improving citizen digital experience.",
+                  tech: ["Laravel", "PHP", "Government Tech"],
+                  status: "Production",
+                },
+              ].map((project, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: index * 0.2 }}
+                  viewport={{ once: true }}
+                  className="group relative"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/20 to-blue-500/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-500"></div>
+                  <div className="relative bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-2xl p-8 hover:border-cyan-500/50 transition-all duration-300 h-full">
+                    <div className="flex items-start justify-between mb-4">
+                      <h3 className="text-xl font-bold text-white">
+                        {project.name}
+                      </h3>
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-medium ${
+                          project.status === "Production"
+                            ? "bg-green-500/20 text-green-400"
+                            : "bg-cyan-500/20 text-cyan-400"
+                        }`}
                       >
-                        <div
-                          className={`absolute -left-2.5 top-0 h-5 w-5 rounded-full ${
-                            isDarkMode
-                              ? "bg-emerald-500 ring-4 ring-gray-900"
-                              : "bg-emerald-600 ring-4 ring-white"
-                          }`}
-                        ></div>
-                        <h4
-                          className={`text-xl font-semibold ${
-                            isDarkMode ? "text-white" : "text-gray-900"
-                          }`}
+                        {project.status}
+                      </span>
+                    </div>
+                    <p className="text-gray-400 mb-6 leading-relaxed">
+                      {project.description}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {project.tech.map((t, i) => (
+                        <span
+                          key={i}
+                          className="px-3 py-1 bg-gray-800/50 text-gray-300 rounded-full text-xs font-mono border border-gray-700"
                         >
-                          Bachelor of Science in Information Technology
-                        </h4>
-                        <p
-                          className={`${
-                            isDarkMode ? "text-gray-400" : "text-gray-700"
-                          } mt-2 text-lg`}
-                        >
-                          Surigao del Norte State University
-                        </p>
-                        <div
-                          className={`inline-block px-3 py-1 mt-3 rounded-full text-sm ${
-                            isDarkMode
-                              ? "bg-emerald-500/20 text-emerald-400"
-                              : "bg-emerald-100 text-emerald-800"
-                          }`}
-                        >
-                          2019 - 2023
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      </section> */}
+
+      {/* Contact Section */}
+      <section id="contact" className="relative py-24 px-6">
+        <div className="container mx-auto relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <div className="text-center mb-16">
+              <span className="text-cyan-400 font-mono text-sm">
+                &lt;contact /&gt;
+              </span>
+              <h2 className="text-4xl font-bold mt-4 mb-8">
+                Let's Build Something
+              </h2>
+            </div>
+
+            <div className="max-w-6xl mx-auto flex justify-center px-4">
+              <div className="w-full max-w-2xl">
+                <div className="grid grid-cols-1 gap-12">
+                  {/* Contact Info */}
+                  <motion.div
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.6 }}
+                    viewport={{ once: true }}
+                    className="space-y-8 mx-auto"
+                  >
+                    <div className="relative group">
+                      <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-300"></div>
+                      <div className="relative bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-2xl p-8 hover:border-cyan-500/50 transition-all duration-300">
+                        <h3 className="text-2xl font-bold mb-8 text-white text-center">
+                          Contact Information
+                        </h3>
+
+                        <div className="space-y-6">
+                          <motion.a
+                            href="tel:09709143842"
+                            whileHover={{ x: 10 }}
+                            className="flex items-center group cursor-pointer"
+                          >
+                            <div className="w-12 h-12 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 flex items-center justify-center mr-4">
+                              <svg
+                                className="w-6 h-6 text-white"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                                />
+                              </svg>
+                            </div>
+                            <div>
+                              <p className="text-gray-400 text-sm">Phone</p>
+                              <p className="text-white font-medium group-hover:text-cyan-400 transition-colors">
+                                09709143842
+                              </p>
+                            </div>
+                          </motion.a>
+
+                          <motion.a
+                            href="mailto:alsolarapole@gmail.com"
+                            whileHover={{ x: 10 }}
+                            className="flex items-center group cursor-pointer"
+                          >
+                            <div className="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center mr-4">
+                              <svg
+                                className="w-6 h-6 text-white"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                                />
+                              </svg>
+                            </div>
+                            <div>
+                              <p className="text-gray-400 text-sm">Email</p>
+                              <p className="text-white font-medium group-hover:text-cyan-400 transition-colors">
+                                alsolarapole@gmail.com
+                              </p>
+                            </div>
+                          </motion.a>
+
+                          <div className="flex items-center">
+                            <div className="w-12 h-12 rounded-full bg-gradient-to-r from-pink-500 to-red-500 flex items-center justify-center mr-4">
+                              <svg
+                                className="w-6 h-6 text-white"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                                />
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                                />
+                              </svg>
+                            </div>
+                            <div>
+                              <p className="text-gray-400 text-sm">Location</p>
+                              <p className="text-white font-medium">
+                                Surigao del Norte, Philippines
+                              </p>
+                            </div>
+                          </div>
                         </div>
-                      </div>
 
-                      <div
-                        className={`relative pl-10 ${
-                          isDarkMode
-                            ? "border-l-2 border-emerald-500"
-                            : "border-l-2 border-emerald-600"
-                        } animate-slide-in`}
-                        style={{ animationDelay: "0.2s" }}
-                      >
-                        <div
-                          className={`absolute -left-2.5 top-0 h-5 w-5 rounded-full ${
-                            isDarkMode
-                              ? "bg-emerald-500 ring-4 ring-gray-900"
-                              : "bg-emerald-600 ring-4 ring-white"
-                          }`}
-                        ></div>
-                        <h4
-                          className={`text-xl font-semibold ${
-                            isDarkMode ? "text-white" : "text-gray-900"
-                          }`}
-                        >
-                          Senior High School
-                        </h4>
-                        <p
-                          className={`${
-                            isDarkMode ? "text-gray-400" : "text-gray-700"
-                          } mt-2 text-lg`}
-                        >
-                          Amando A. Fabio National High School
-                        </p>
-                        <div
-                          className={`inline-block px-3 py-1 mt-3 rounded-full text-sm ${
-                            isDarkMode
-                              ? "bg-emerald-500/20 text-emerald-400"
-                              : "bg-emerald-100 text-emerald-800"
-                          }`}
-                        >
-                          2017 - 2019
+                        {/* Social Links */}
+                        <div className="mt-10 pt-8 border-t border-gray-800">
+                          <h4 className="text-lg font-bold text-white mb-4 text-center">
+                            Connect Online
+                          </h4>
+                          <div className="flex justify-center space-x-4">
+                            <motion.a
+                              href="https://www.linkedin.com/in/alfonso-solar-6a826618a"
+                              target="_blank"
+                              whileHover={{ scale: 1.1, rotate: 5 }}
+                              whileTap={{ scale: 0.9 }}
+                              className="w-12 h-12 rounded-full bg-gradient-to-r from-blue-600 to-blue-700 flex items-center justify-center hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-300"
+                            >
+                              <svg
+                                className="w-6 h-6 text-white"
+                                fill="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+                              </svg>
+                            </motion.a>
+                            <motion.a
+                              href="https://www.github.com/SolarismAl"
+                              target="_blank"
+                              whileHover={{ scale: 1.1, rotate: -5 }}
+                              whileTap={{ scale: 0.9 }}
+                              className="w-12 h-12 rounded-full bg-gradient-to-r from-gray-700 to-gray-800 flex items-center justify-center hover:shadow-lg hover:shadow-gray-500/25 transition-all duration-300"
+                            >
+                              <svg
+                                className="w-6 h-6 text-white"
+                                fill="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                              </svg>
+                            </motion.a>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                )}
+                  </motion.div>
 
-                {activeTab === "skills" && (
-                  <div className="animate-fade-in">
-                    <h3 className="text-2xl font-bold mb-6">Skills</h3>
+                  {/* Contact Form */}
+                  {/* <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                viewport={{ once: true }}
+                className="relative group"
+                >
+                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-300"></div>
+                <div className="relative bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-2xl p-8 hover:border-purple-500/50 transition-all duration-300">
+                  <h3 className="text-2xl font-bold mb-8 text-white text-center">
+                  Send a Message
+                  </h3>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                      <div
-                        className="animate-slide-in"
-                        style={{ animationDelay: "0.1s" }}
-                      >
-                        <h4 className="text-xl font-semibold mb-4 flex items-center">
-                          <svg
-                            className="w-6 h-6 mr-2 text-blue-800"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                          Programming
-                        </h4>
-                        <p className="text-gray-700">
-                          Experienced beginner to intermediate in web
-                          application development using HTML, CSS, and PHP with
-                          the Laravel Framework. Also knowledgeable in basic
-                          React Native for mobile applications, with growing
-                          experience in building modern interfaces using Next.js
-                          and Tailwind CSS.
-                        </p>
-                      </div>
-
-                      {/* <div className="animate-slide-in" style={{ animationDelay: '0.2s' }}>
-                        <h4 className="text-xl font-semibold mb-4 flex items-center">
-                          <svg className="w-6 h-6 mr-2 text-blue-800" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M3 5a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2h-2.22l.123.489.804.804A1 1 0 0113 18H7a1 1 0 01-.707-1.707l.804-.804L7.22 15H5a2 2 0 01-2-2V5zm5.771 7H5V5h10v7H8.771z" clipRule="evenodd" />
-                          </svg>
-                          Computer Servicing
-                        </h4>
-                        <p className="text-gray-700">
-                          Knowledgeable in computer hardware and software service that specifies in computer 
-                          assembly and disassembly, OS Installing, and reformatting.
-                        </p>
-                      </div> */}
-
-                      <div
-                        className="animate-slide-in"
-                        style={{ animationDelay: "0.3s" }}
-                      >
-                        <h4 className="text-xl font-semibold mb-4 flex items-center">
-                          <svg
-                            className="w-6 h-6 mr-2 text-blue-800"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                          Entrepreneurial & Pitching Skills
-                        </h4>
-                        <p className="text-gray-700">
-                          Basic pitching throughout OJT experience. Presentation
-                          of startup ideas persuading audience to be pioneering
-                          users.
-                        </p>
-                      </div>
-
-                      <div
-                        className="animate-slide-in"
-                        style={{ animationDelay: "0.4s" }}
-                      >
-                        <h4 className="text-xl font-semibold mb-4 flex items-center">
-                          <svg
-                            className="w-6 h-6 mr-2 text-blue-800"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                          Project Proposal Development
-                        </h4>
-                        <p className="text-gray-700">
-                          Capable of creating detailed project proposals,
-                          including objectives, timelines, and resource
-                          requirements.
-                        </p>
-                      </div>
-
-                      <div
-                        className="animate-slide-in"
-                        style={{ animationDelay: "0.5s" }}
-                      >
-                        <h4 className="text-xl font-semibold mb-4 flex items-center">
-                          <svg
-                            className="w-6 h-6 mr-2 text-blue-800"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M5 3a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2V5a2 2 0 00-2-2H5zm9 4a1 1 0 10-2 0v6a1 1 0 102 0V7zm-3 2a1 1 0 10-2 0v4a1 1 0 102 0V9zm-3 3a1 1 0 10-2 0v1a1 1 0 102 0v-1z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                          Marketing Awareness
-                        </h4>
-                        <p className="text-gray-700">
-                          Understanding of basic marketing principles and
-                          strategies. Ability to integrate marketing concepts
-                          into project proposals and presentations.
-                        </p>
-                      </div>
+                  <form className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                    <label className="block text-gray-400 text-sm font-medium mb-2">
+                      Name
+                    </label>
+                    <input
+                      type="text"
+                      className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all duration-300"
+                      placeholder="Your name"
+                    />
+                    </div>
+                    <div>
+                    <label className="block text-gray-400 text-sm font-medium mb-2">
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all duration-300"
+                      placeholder="your.email@example.com"
+                    />
                     </div>
                   </div>
-                )}
+
+                  <div>
+                    <label className="block text-gray-400 text-sm font-medium mb-2">
+                    Project Type
+                    </label>
+                    <select className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-xl text-white focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all duration-300">
+                    <option>Web Development</option>
+                    <option>Mobile App</option>
+                    <option>Consultation</option>
+                    <option>Other</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-gray-400 text-sm font-medium mb-2">
+                    Message
+                    </label>
+                    <textarea
+                    rows={6}
+                    className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all duration-300 resize-none"
+                    placeholder="Tell me about your project..."
+                    ></textarea>
+                  </div>
+
+                  <motion.button
+                    type="submit"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="w-full px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-cyan-500/25 transition-all duration-300"
+                  >
+                    Send Message
+                  </motion.button>
+                  </form>
+                </div>
+                </motion.div> */}
+                </div>
               </div>
             </div>
           </motion.div>
         </div>
       </section>
 
-      {/* Contact Section */}
-      {/* Contact Section */}
-      <section
-        id="contact"
-        className={`py-20 ${isDarkMode ? "bg-gray-900" : "bg-gray-50"}`}
-      >
-        <motion.div
-          className="container mx-auto px-4"
-          initial={{ opacity: 0, y: 20 }}
-          animate={isLoaded ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-        >
-          <div className="flex items-center justify-center gap-4 mb-12">
-            <div
-              className={`h-px w-12 ${
-                isDarkMode ? "bg-emerald-400" : "bg-emerald-600"
-              }`}
-            ></div>
-            <h2
-              className={`text-3xl font-bold ${
-                isDarkMode ? "text-white" : "text-gray-900"
-              }`}
-            >
-              Get In Touch
-            </h2>
-            <div
-              className={`h-px w-12 ${
-                isDarkMode ? "bg-emerald-400" : "bg-emerald-600"
-              }`}
-            ></div>
-          </div>
-
-          <div
-            className={`rounded-2xl shadow-xl overflow-hidden ${
-              isDarkMode ? "bg-gray-800" : "bg-white"
-            }`}
-          >
-            <div className="grid grid-cols-1 lg:grid-cols-5">
-              {/* Contact Info Panel */}
-              <div
-                className={`lg:col-span-2 ${
-                  isDarkMode ? "bg-emerald-700" : "bg-emerald-600"
-                } text-white p-8 lg:p-10`}
-              >
-                <h3 className="text-2xl font-semibold mb-8">
-                  Contact Information
-                </h3>
-
-                <div className="space-y-6">
-                  <div className="flex items-center">
-                    <div
-                      className={`p-2 rounded-full mr-4 ${
-                        isDarkMode ? "bg-emerald-600" : "bg-emerald-500"
-                      }`}
-                    >
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-                        />
-                      </svg>
-                    </div>
-                    <a href="tel:09709143842" className="hover:underline">
-                      09709143842
-                    </a>
-                  </div>
-
-                  <div className="flex items-center">
-                    <div
-                      className={`p-2 rounded-full mr-4 ${
-                        isDarkMode ? "bg-emerald-600" : "bg-emerald-500"
-                      }`}
-                    >
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                        />
-                      </svg>
-                    </div>
-                    <a
-                      href="mailto:alsolarapole@gmail.com"
-                      className="hover:underline"
-                    >
-                      alsolarapole@gmail.com
-                    </a>
-                  </div>
-
-                  <div className="flex items-start">
-                    <div
-                      className={`p-2 rounded-full mr-4 mt-1 ${
-                        isDarkMode ? "bg-emerald-600" : "bg-emerald-500"
-                      }`}
-                    >
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                        />
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                        />
-                      </svg>
-                    </div>
-                    <div>
-                      P-2 Lower Libas Tagana-an
-                      <br />
-                      Surigao del Norte
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-12">
-                  <h3 className="text-xl font-semibold mb-4">Connect</h3>
-                  <div className="flex space-x-4">
-                    <a
-                      href="#"
-                      className={`p-2 rounded-full hover:opacity-80 transition-opacity ${
-                        isDarkMode ? "bg-emerald-600" : "bg-emerald-500"
-                      }`}
-                    >
-                      <svg
-                        className="w-5 h-5"
-                        fill="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z" />
-                      </svg>
-                    </a>
-                    <a
-                      href="#"
-                      className={`p-2 rounded-full hover:opacity-80 transition-opacity ${
-                        isDarkMode ? "bg-emerald-600" : "bg-emerald-500"
-                      }`}
-                    >
-                      <svg
-                        className="w-5 h-5"
-                        fill="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
-                      </svg>
-                    </a>
-                    <a
-                      href="#"
-                      className={`p-2 rounded-full hover:opacity-80 transition-opacity ${
-                        isDarkMode ? "bg-emerald-600" : "bg-emerald-500"
-                      }`}
-                    >
-                      <svg
-                        className="w-5 h-5"
-                        fill="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
-                      </svg>
-                    </a>
-                  </div>
-                </div>
-              </div>
-
-              {/* Details and Form Panel */}
-              <div className="lg:col-span-3 p-8 lg:p-10">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-                  <div>
-                    <h3
-                      className={`text-xl font-semibold mb-4 ${
-                        isDarkMode ? "text-white" : "text-gray-900"
-                      }`}
-                    >
-                      Languages
-                    </h3>
-                    <div className="space-y-3">
-                      <div className="flex items-center">
-                        <div
-                          className={`w-full rounded-full h-2.5 ${
-                            isDarkMode ? "bg-gray-700" : "bg-gray-200"
-                          }`}
-                        >
-                          <div
-                            className={`h-2.5 rounded-full w-1/3 ${
-                              isDarkMode ? "bg-emerald-400" : "bg-emerald-600"
-                            }`}
-                          ></div>
-                        </div>
-                        <span
-                          className={`ml-3 ${
-                            isDarkMode ? "text-gray-300" : "text-gray-700"
-                          }`}
-                        >
-                          English
-                        </span>
-                      </div>
-                      <div className="flex items-center">
-                        <div
-                          className={`w-full rounded-full h-2.5 ${
-                            isDarkMode ? "bg-gray-700" : "bg-gray-200"
-                          }`}
-                        >
-                          <div
-                            className={`h-2.5 rounded-full w-full ${
-                              isDarkMode ? "bg-emerald-400" : "bg-emerald-600"
-                            }`}
-                          ></div>
-                        </div>
-                        <span
-                          className={`ml-3 ${
-                            isDarkMode ? "text-gray-300" : "text-gray-700"
-                          }`}
-                        >
-                          Filipino
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div>
-                    <h3
-                      className={`text-xl font-semibold mb-4 ${
-                        isDarkMode ? "text-white" : "text-gray-900"
-                      }`}
-                    >
-                      Interests
-                    </h3>
-                    <div className="flex flex-wrap gap-2">
-                      <span
-                        className={`px-3 py-1 rounded-full text-sm ${
-                          isDarkMode
-                            ? "bg-emerald-900 text-emerald-300"
-                            : "bg-emerald-100 text-emerald-800"
-                        }`}
-                      >
-                        Reading
-                      </span>
-                      <span
-                        className={`px-3 py-1 rounded-full text-sm ${
-                          isDarkMode
-                            ? "bg-emerald-900 text-emerald-300"
-                            : "bg-emerald-100 text-emerald-800"
-                        }`}
-                      >
-                        Films
-                      </span>
-                      <span
-                        className={`px-3 py-1 rounded-full text-sm ${
-                          isDarkMode
-                            ? "bg-emerald-900 text-emerald-300"
-                            : "bg-emerald-100 text-emerald-800"
-                        }`}
-                      >
-                        TV Series
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-      </section>
-
       {/* Footer */}
-      <footer className="bg-gray-800 text-white py-8">
-        <div className="container mx-auto px-4 text-center">
-          <p>
-            &copy; {new Date().getFullYear()} Alfonso A. Solar. All rights
-            reserved.
-          </p>
+      <footer className="relative py-12 px-6 border-t border-gray-800/50">
+        <div className="container mx-auto relative z-10">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              className="mb-6 md:mb-0"
+            >
+              <div className="text-2xl font-bold">
+                <span className="text-white">Alfonso</span>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
+                  .dev
+                </span>
+              </div>
+              <p className="text-gray-500 text-sm mt-2">
+                Building the future, one line at a time
+              </p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              className="text-center md:text-right"
+            >
+              <p className="text-gray-500 text-sm">
+                © {new Date().getFullYear()} Alfonso A. Solar. Crafted with
+                passion and caffeine.
+              </p>
+              <p className="text-gray-600 text-xs mt-1 font-mono">
+                {"{ Made with React + Tailwind + Love }"}
+              </p>
+            </motion.div>
+          </div>
         </div>
       </footer>
 
-      {/* Optional: Add this style for a visual indication when the Learn More button is clicked */}
+      {/* Custom Styles */}
       <style jsx global>{`
-        @keyframes pulse {
+        @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap");
+
+        * {
+          font-family: "Inter", sans-serif;
+        }
+
+        .font-mono {
+          font-family: "JetBrains Mono", monospace;
+        }
+
+        html {
+          scroll-behavior: smooth;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+          width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+          background: #111;
+        }
+
+        ::-webkit-scrollbar-thumb {
+          background: linear-gradient(to bottom, #06b6d4, #3b82f6);
+          border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+          background: linear-gradient(to bottom, #0891b2, #2563eb);
+        }
+
+        /* Glitch effect for hover states */
+        @keyframes glitch {
           0% {
-            transform: scale(1);
+            transform: translate(0);
           }
-          50% {
-            transform: scale(1.05);
+          20% {
+            transform: translate(-2px, 2px);
+          }
+          40% {
+            transform: translate(-2px, -2px);
+          }
+          60% {
+            transform: translate(2px, 2px);
+          }
+          80% {
+            transform: translate(2px, -2px);
           }
           100% {
-            transform: scale(1);
+            transform: translate(0);
           }
         }
 
-        .learn-more-btn:active {
-          animation: pulse 0.3s;
+        .hover-glitch:hover {
+          animation: glitch 0.3s ease-in-out;
+        }
+
+        /* Gradient text animation */
+        @keyframes gradient-shift {
+          0% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
+          100% {
+            background-position: 0% 50%;
+          }
+        }
+
+        .animate-gradient {
+          background-size: 200% 200%;
+          animation: gradient-shift 3s ease infinite;
         }
       `}</style>
-    </main>
+    </div>
   );
 }
