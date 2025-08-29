@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState("experience");
@@ -121,10 +122,11 @@ export default function Home() {
                 <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-500 blur-2xl opacity-30 animate-pulse"></div>
                 <div className="relative w-80 h-80 rounded-2xl overflow-hidden border border-gray-700/50 bg-gradient-to-br from-gray-800 to-gray-900">
                   <div className="absolute inset-2 rounded-xl overflow-hidden">
-                    <img
+                    <Image
                       src="/alfonso_solar.jpg"
                       alt="Alfonso A. Solar"
-                      className="w-full h-full object-cover"
+                      fill
+                      className="object-cover"
                     />
                   </div>
                   {/* Tech overlay elements */}
